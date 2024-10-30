@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    kotlin("kapt") // Kapt 플러그인
+    alias(libs.plugins.hilt) // Hilt 플러그인
 }
 
 android {
@@ -63,4 +65,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Hilt 의존성
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }
