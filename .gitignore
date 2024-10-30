@@ -1,0 +1,48 @@
+# Gradle 관련 파일
+.gradle/
+build/
+
+# 프로젝트 관련 파일
+.idea/
+*.iml
+*.hprof
+*.log
+
+# 사용자별 설정 파일
+local.properties
+.DS_Store
+*.swp
+
+# Android 관련 파일
+/captures/
+/output/
+*.apk
+*.ap_
+
+# Android Studio specific
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+/.idea/misc.xml
+*.iws
+*.iml
+*.ipr
+
+# Keystore files
+*.jks
+
+# NDK
+/.cxx/
+local.properties
+
+# Google Services (e.g. Firebase)
+/google-services.json
+# Firebase Crashlytics mapping file
+/crashlytics-build.properties
+
+# IntelliJ IDEA
+out/
+No newline at end of file
