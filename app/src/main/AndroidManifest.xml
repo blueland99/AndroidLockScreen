@@ -36,7 +36,7 @@
         </activity>
 
         <service
-            android:name=".service.LockService"
+            android:name=".service.LockForegroundService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
     </application>

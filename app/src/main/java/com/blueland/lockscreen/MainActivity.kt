@@ -24,48 +24,48 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    val TAG = this.javaClass.simpleName
+    private val TAG = this.javaClass.simpleName // 클래스 이름을 태그로 사용
 
     @Inject
-    lateinit var lockServiceManager: LockServiceManager
+    lateinit var lockServiceManager: LockServiceManager // LockServiceManager 주입
 
     // 오버레이 권한 요청용 런처
-    private val overlayPermissionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (needsOverlayPermission(this)) {
-            // 거부
+    private val overlayPermissionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (isOverlayPermissionGranted(this)) {
+            Log.e(TAG, "Overlay permission denied") // 권한 거부 시 로그 출력
         } else {
-            // 허용
-            startLockService()
+            Log.d(TAG, "Overlay permission granted") // 권한 허용 시 로그 출력
+            startLockService() // 잠금 서비스 시작
         }
     }
 
     // 오버레이 권한이 필요한지 확인
-    fun needsOverlayPermission(context: Context): Boolean {
-        return !Settings.canDrawOverlays(context)
+    private fun isOverlayPermissionGranted(context: Context): Boolean {
+        return !Settings.canDrawOverlays(context) // 권한 필요 여부 반환
     }
 
     private fun checkPermissions() {
         // 오버레이 권한 확인 및 요청
-        if (needsOverlayPermission(this)) {
-            Log.e(TAG, "checkPermissions: 오버레이")
+        if (isOverlayPermissionGranted(this)) {
+            Log.e(TAG, "checkPermissions: Overlay permission needed")
             val overlayIntent = Intent(
                 Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                Uri.parse("package:${packageName}")
+                Uri.parse("package:${packageName}") // 현재 패키지의 오버레이 권한 설정 화면으로 이동
             )
-            overlayPermissionLauncher.launch(overlayIntent)
+            overlayPermissionLauncher.launch(overlayIntent) // 권한 요청 실행
         } else {
-            startLockService()
+            startLockService() // 권한이 있으면 잠금 서비스 시작
         }
     }
 
     private fun startLockService() {
-        lockServiceManager.start()
+        lockServiceManager.start() // 잠금 서비스 시작
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 권한 확인 및 요청 시작
-        checkPermissions()
+
+        checkPermissions() // 권한 확인 및 요청 시작
 
         setContent {
             ComposeLockScreenTheme {
