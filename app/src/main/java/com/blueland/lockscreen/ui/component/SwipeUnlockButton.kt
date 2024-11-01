@@ -1,3 +1,5 @@
+package com.blueland.lockscreen
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearEasing
@@ -37,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -52,7 +55,6 @@ fun SwipeUnlockButton(
     text: String,
     isComplete: Boolean,
     doneImageVector: ImageVector = Icons.Rounded.Done,
-    backgroundColor: Color = Color(0xFF03A9F4),
     onSwipe: () -> Unit
 ) {
     val buttonWidthPx = with(LocalDensity.current) { 64.dp.toPx() } // 스와이프 아이콘 너비
@@ -73,9 +75,9 @@ fun SwipeUnlockButton(
     )
 
     // 스와이프 뷰 너비에 따른 임계값 설정
-    LaunchedEffect(offsetX.value, viewWidthPx) {
+    LaunchedEffect(offsetX.floatValue, viewWidthPx) {
         val swipeThreshold = viewWidthPx - buttonWidthPx
-        if (offsetX.value >= swipeThreshold && !swipeComplete.value) {
+        if (offsetX.floatValue >= swipeThreshold && !swipeComplete.value) {
             swipeComplete.value = true
             onSwipe()
         }
@@ -90,7 +92,11 @@ fun SwipeUnlockButton(
                 viewWidthPx = coordinates.size.width.toFloat() // 스와이프 뷰 너비 가져오기
             }
             .clip(CircleShape)
-            .background(backgroundColor)
+            .background(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(Color(0xFFD3D3D3), Color(0xFFB0B0B0)) // 회색 그라데이션
+                )
+            )
             .animateContentSize()
             .then(if (swipeComplete.value) Modifier.width(64.dp) else Modifier.fillMaxWidth())
     ) {
@@ -98,27 +104,26 @@ fun SwipeUnlockButton(
             modifier = Modifier
                 .align(Alignment.CenterStart)
                 .alpha(alpha)
-                .offset { IntOffset(offsetX.value.roundToInt(), 0) }
+                .offset { IntOffset(offsetX.floatValue.roundToInt(), 0) }
                 .draggable(
                     state = draggableState,
                     orientation = Orientation.Horizontal,
                     onDragStopped = {
-                        if (offsetX.value < viewWidthPx - buttonWidthPx) {
-                            offsetX.value = 0f // 완료되지 않으면 원위치로 돌아감
+                        if (offsetX.floatValue < viewWidthPx - buttonWidthPx) {
+                            offsetX.floatValue = 0f // 완료되지 않으면 원위치로 돌아감
                         }
                     }
-                ),
-            backgroundColor = backgroundColor
+                )
         )
         Text(
             text = text,
-            color = Color.White,
+            color = Color.Black, // 텍스트 색상 변경
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .alpha(alpha)
                 .padding(horizontal = 80.dp)
-                .offset { IntOffset(offsetX.value.roundToInt(), 0) }
+                .offset { IntOffset(offsetX.floatValue.roundToInt(), 0) }
         )
         AnimatedVisibility(
             visible = swipeComplete.value && !isComplete,
@@ -126,7 +131,7 @@ fun SwipeUnlockButton(
             exit = fadeOut()
         ) {
             CircularProgressIndicator(
-                color = Color.White,
+                color = Color.Black, // 색상 변경
                 strokeWidth = 1.dp,
                 modifier = Modifier
                     .fillMaxSize()
@@ -141,7 +146,7 @@ fun SwipeUnlockButton(
             Icon(
                 imageVector = doneImageVector,
                 contentDescription = null,
-                tint = Color.White,
+                tint = Color.Black, // 색상 변경
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(44.dp)
@@ -153,7 +158,6 @@ fun SwipeUnlockButton(
 @Composable
 private fun SwipeIndicator(
     modifier: Modifier = Modifier,
-    backgroundColor: Color
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -162,12 +166,12 @@ private fun SwipeIndicator(
             .padding(2.dp)
             .clip(CircleShape)
             .aspectRatio(1f)
-            .background(Color.White)
+            .background(Color.White) // 원형 표시기 배경색
     ) {
         Icon(
             imageVector = Icons.Rounded.Check,
             contentDescription = null,
-            tint = backgroundColor,
+            tint = Color.Gray, // 색상 변경
             modifier = Modifier.size(36.dp)
         )
     }
