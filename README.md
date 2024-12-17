@@ -2,7 +2,7 @@
 
 ## 개요
 
-ComposeLockScreen은 Jetpack Compose를 사용하여 구현된 잠금 화면 애플리케이션입니다. 이 프로젝트는 현대적인 Android 애플리케이션 개발의 예시로, 스와이프 잠금 해제 기능을 제공합니다.
+ComposeLockScreen은 Jetpack Compose를 사용하여 구현된 잠금 화면 애플리케이션입니다. 이 프로젝트는 Android Compose 앱 개발의 예시로, 스와이프 잠금 해제 기능을 제공합니다.
 
 ## 주요 기능
 
