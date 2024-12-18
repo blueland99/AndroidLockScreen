@@ -32,8 +32,8 @@ class LockForegroundService : Service() {
 
         val notification = createNotification() // 알림 생성
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            startForeground(SERVICE_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC) // 포그라운드 서비스 시작 (Android 12 이상)
-        } else { // Android 12 이하
+            startForeground(SERVICE_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC) // 포그라운드 서비스 시작 (Android 14 이상)
+        } else { // Android 13 이하
             startForeground(SERVICE_ID, notification) // 포그라운드 서비스 시작
         }
         registerLockReceiver() // LockReceiver 등록
